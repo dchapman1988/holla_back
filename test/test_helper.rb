@@ -24,3 +24,8 @@ Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
 
 # Load the app
 require File.expand_path("../../lib/holla_back.rb", __FILE__)
+
+# A test class for our specs
+class TestClass
+  include HollaBack
+end

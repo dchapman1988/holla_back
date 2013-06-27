@@ -31,6 +31,7 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'yardstick'
   gem.add_development_dependency 'redcarpet'
   gem.add_development_dependency 'guard-minitest'
+  gem.add_development_dependency 'libnotify'
   gem.add_development_dependency 'mocha'
   gem.add_development_dependency 'version'
   gem.add_development_dependency 'turn'
