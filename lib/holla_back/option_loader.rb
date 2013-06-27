@@ -4,8 +4,8 @@ module HollaBack
     # Loads one option into an instance variable and raises if it's missing the option
     #
     # @example
-    # load_option('foo', {:foo => 'bar'})
-    # @foo #=> 'bar'
+    #   load_option('foo', {:foo => 'bar'})
+    #   @foo #=> 'bar'
     #
     # @param [String] option the name of the instance variable you want
     # @param [Hash] options the hash of options to fetch the value of the instance variable
@@ -19,9 +19,9 @@ module HollaBack
     # Loads multiple options in an array from an options hash
     #
     # @example
-    # load_options({:foo1 => 'bar1', :foo2 => 'bar2'}, :foo1, :foo2)
-    # @foo1 #=> 'bar1'
-    # @foo2 #=> 'bar2'
+    #   load_options({:foo1 => 'bar1', :foo2 => 'bar2'}, :foo1, :foo2)
+    #   @foo1 #=> 'bar1'
+    #   @foo2 #=> 'bar2'
     #
     #
     # @param [Array] option_names the array of option names to fetch from the options hash

@@ -9,21 +9,16 @@ describe HollaBack::Response do
       responding_object.expects(:meth2).with('param').returns(42).at_least_once
       responding_methods = [:meth1, {:meth2 => ['param']}]
       @options = {
-        responding_object: responding_object,
         responding_methods: responding_methods,
         status_method: 'status_meth',
         success_message: 'success',
         failure_message: 'failure'
       }
-      @response = HollaBack::Response.new(@options)
+      @response = HollaBack::Response.new(responding_object, @options)
     end
 
     it 'should provide a successful status method' do
       @response.successful?.must_equal true
-    end
-
-    it 'should provide a response object' do
-      @response.holla_back.must_be_kind_of HollaBack::Response
     end
 
     it 'should provide the responding methods' do
@@ -45,21 +40,16 @@ describe HollaBack::Response do
       responding_object.expects(:meth).returns(42).at_least_once
       responding_methods = ['meth']
       @options = {
-        responding_object: responding_object,
         responding_methods: responding_methods,
         status_method: 'status_meth',
         success_message: 'success',
         failure_message: 'failure'
       }
-      @response = HollaBack::Response.new(@options)
+      @response = HollaBack::Response.new(responding_object, @options)
     end
 
     it 'should provide a successful status method' do
       @response.successful?.must_equal false
-    end
-
-    it 'should provide a response object' do
-      @response.holla_back.must_be_kind_of HollaBack::Response
     end
 
     it 'should provide the responding methods' do
@@ -76,7 +66,7 @@ describe HollaBack::Response do
   describe "A unsuccessful response due to a undefined methods" do
     before do
       responding_object = TestClass.new
-      responding_methods = ['meth', 'class']
+      responding_methods = ['meth', 'class', {:thing_that_doesnt_exist => ['test']}]
       @options = {
         responding_object: responding_object,
         responding_methods: responding_methods,
@@ -84,7 +74,7 @@ describe HollaBack::Response do
         success_message: 'success',
         failure_message: 'failure'
       }
-      @response = HollaBack::Response.new(@options)
+      @response = HollaBack::Response.new(responding_object, @options)
     end
 
     it 'should return the exception class as the responding object' do

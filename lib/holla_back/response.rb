@@ -1,10 +1,15 @@
-require "holla_back/option_loader"
+require_relative "../holla_back/option_loader.rb"
 module HollaBack
-  attr_accessor :status, :status_message
   # The main class for providing response objects
   class Response
     include HollaBack::OptionLoader
-    attr_accessor :responding_object, :responding_methods, :status_message
+    # @return [Object] responding_object - The responding object
+    # @api public
+    attr_accessor :responding_object
+    # @return [Hash] responding_methods - The hash of key (method) value (return) pairs
+    attr_accessor :responding_methods
+    # @return [String] status_message - The status message for the response
+    attr_accessor :status_message
 
     # A new instance of HollaBack::Response
     #
@@ -12,15 +17,17 @@ module HollaBack
     #   response = HollaBack::Response.new({responding_object: SomeObject.new, status_message: 'valid?'})
     #
     # @param [Hash] options - a hash of options
+    # @param [Object] responding_obj - the object responsible for determining a response
     # @return [Response] the new response object
     # @api public
-    def initialize(options)
+    def initialize(responding_obj=nil, options)
       options = {
         responding_methods: [],
         success_message: nil,
-        failure_message: nil,
+        failure_message: nil
       }.merge(options)
-      load_options(options, :responding_object, :responding_methods, :status_method, :success_message, :failure_message)
+      load_options(options, :responding_methods, :status_method, :success_message, :failure_message)
+      self.responding_object = responding_obj
       set_response!
     end
 
@@ -36,24 +43,16 @@ module HollaBack
       !!@responding_object.send(@status_method)
     end
 
-    # The response object
-    #
-    # @example
-    #   response.response #=> #<HollaBack::Response>
-    #
-    # @return [HollaBack::Response] the response object
-    def holla_back
-      self
-    end
-
     private
     # Sets the response attributes
     #
     # @example
     #   response.set_response! #=> #<HollaBack::Response>
     #
+    # @return [Boolean] true - because we want a consistant response for this method
     # @api private
     def set_response!
+      get_responding_methods
       begin
         self.responding_object = @responding_object
         if successful?
@@ -65,7 +64,7 @@ module HollaBack
         self.responding_object = e.class
         self.status_message = e.message
       end
-      get_responding_methods
+      return true
     end
 
     # Gets the responding methods
@@ -73,7 +72,7 @@ module HollaBack
     # @example
     #   response.get_responding_methods
     # @return [Hash] a hash methods as keys and their return as values
-    # @api public
+    # @api private
     def get_responding_methods
       meth_responses = {}
       @responding_methods.each do |meth|
