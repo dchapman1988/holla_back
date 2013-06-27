@@ -6,10 +6,10 @@ Gem::Specification.new do |gem|
   gem.name          = "holla_back"
   gem.version       = `cat VERSION`.strip
   gem.authors       = ["David Chapman"]
-  gem.email         = ["david@isotope11.com"]
+  gem.email         = ["david@dchapman.io"]
   gem.description   = %q{A simple Ruby gem for providing a response standard to your libraries}
   gem.summary       = %q{HollaBack will simply provide a unified response object containing needed information and responses.}
-  gem.homepage      = ""
+  gem.homepage      = "http://dchapman.io/"
   gem.license       = "MIT"
 
   gem.files         = `git ls-files`.split($/)
