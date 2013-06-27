@@ -1,5 +1,4 @@
 require "holla_back/option_loader"
-
 module HollaBack
   attr_accessor :status, :status_message
   # The main class for providing response objects
@@ -79,9 +78,21 @@ module HollaBack
       meth_responses = {}
       @responding_methods.each do |meth|
         begin
-          meth_responses[meth.to_sym] = @responding_object.send(meth)
+          if meth.is_a? Hash
+            meth.each_pair { |k,v|
+              meth_responses[k.to_sym] = @responding_object.send(k, *v)
+            }
+          else
+            meth_responses[meth.to_sym] = @responding_object.send(meth)
+          end
         rescue Exception => e
-          meth_responses[meth.to_sym] = "#{e.class}: #{e.message}"
+          if meth.is_a? Hash
+            meth.each_pair { |k,v|
+              meth_responses[k.to_sym] = "#{e.class}: #{e.message}"
+            }
+          else
+            meth_responses[meth.to_sym] = "#{e.class}: #{e.message}"
+          end
         end
       end
       self.responding_methods = meth_responses

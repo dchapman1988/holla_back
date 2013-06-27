@@ -3,11 +3,15 @@ require 'test_helper'
 describe HollaBack do
   subject { HollaBack }
 
-  it 'should be a thing' do
-    subject.must_be_kind_of Module
+  before do
+    @test_class = TestClass.new
   end
 
-  it 'should provide methods to a class' do
-    TestClass.included_modules.must_include subject
+  it 'should be included into a class' do
+    @test_class.class.included_modules.must_include subject
+  end
+
+  it 'should inject a response method' do
+    @test_class.must_respond_to :response
   end
 end

@@ -5,8 +5,9 @@ describe HollaBack::Response do
     before do
       responding_object = mock('responding_object')
       responding_object.expects(:status_meth).returns(true).at_least_once
-      responding_object.expects(:meth).returns(42).at_least_once
-      responding_methods = ['meth']
+      responding_object.expects(:meth1).returns(42).at_least_once
+      responding_object.expects(:meth2).with('param').returns(42).at_least_once
+      responding_methods = [:meth1, {:meth2 => ['param']}]
       @options = {
         responding_object: responding_object,
         responding_methods: responding_methods,
@@ -27,7 +28,8 @@ describe HollaBack::Response do
 
     it 'should provide the responding methods' do
       @response.responding_methods.must_be_kind_of Hash
-      @response.responding_methods[:meth].must_equal 42
+      @response.responding_methods[:meth1].must_equal 42
+      @response.responding_methods[:meth2].must_equal 42
     end
 
     it 'should return the success message' do
