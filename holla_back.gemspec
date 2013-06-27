@@ -20,17 +20,17 @@ Gem::Specification.new do |gem|
 
   gem.add_development_dependency "bundler", "~> 1.3"
   gem.add_development_dependency "rake"
-  gem.add_development_dependency 'minitest', '4.1.0'
+  gem.add_development_dependency 'minitest'
   gem.add_development_dependency 'minitest-matchers'
   gem.add_development_dependency 'minitest-reporters'
   gem.add_development_dependency 'pry'
   gem.add_development_dependency 'rake'
   gem.add_development_dependency 'simplecov'
   gem.add_development_dependency 'simplecov-rcov'
-  gem.add_development_dependency 'rcov', '0.9.11'
   gem.add_development_dependency 'yard'
   gem.add_development_dependency 'yardstick'
   gem.add_development_dependency 'redcarpet'
+  gem.add_development_dependency 'guard-minitest'
   gem.add_development_dependency 'mocha'
   gem.add_development_dependency 'version'
   gem.add_development_dependency 'turn'
