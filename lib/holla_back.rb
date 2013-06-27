@@ -1,4 +1,3 @@
-require_relative "../lib/holla_back/version"
 require_relative "../lib/holla_back/response"
 require_relative "../lib/holla_back/option_loader"
 

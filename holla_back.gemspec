@@ -1,11 +1,10 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'holla_back/version'
 
 Gem::Specification.new do |gem|
   gem.name          = "holla_back"
-  gem.version       = HollaBack::VERSION
+  gem.version       = `cat VERSION`.strip
   gem.authors       = ["David Chapman"]
   gem.email         = ["david@isotope11.com"]
   gem.description   = %q{A simple Ruby gem for providing a response standard to your libraries}
