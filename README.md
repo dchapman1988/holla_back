@@ -21,7 +21,7 @@ Or install it yourself as:
 
 ## Usage
 
-Ponder the hypothetical class with HollaBack included that will be used for these examples as defined below:
+Ponder the hypothetical class with HollaBack included that will be used for these examples:
 
 > `some_class.rb`
 
@@ -53,12 +53,25 @@ Ponder the hypothetical class with HollaBack included that will be used for thes
       end
     end
 
+
 Simple example:
 
     klass = SomeClass.new
 
     # Minimal request
     response = klass.response(status_method: 'truthy_method') 
+    # => #<HollaBack::Response>
+    response.successful?
+    # => true
+    response.status_message
+    # => "Status: successful"
+
+With params in the status method:
+
+    klass = SomeClass.new
+
+    # Minimal request
+    response = klass.response(status_method: {optional_method_with_params: [true]}) 
     # => #<HollaBack::Response>
     response.successful?
     # => true
@@ -103,6 +116,20 @@ With some method that totally doesn't exist
     #=> NoMethodError
     response.status_message
     #=> "undefined method `some_method_that_totally_doesnt_exist' for #<SomeClass:0x00000001e1b008>"
+
+## Synopsis For Sending Methods
+
+Synopsis for sending a method with parameters (the all important status method):
+
+    # This is how you'd do it for the status method
+    {:name_of_status_method => ['array', 'of', 'input', 'parameters']}
+
+Synopsis for sending multiple methods, some requiring parameters:
+
+    # This is how you'd do it for the responding methods, which follows the same
+    # pattern as the status method, but as elements in an array so that you can
+    # respond with multiple responding methods
+    ['name_of_some_method_with_no_params', {:name_of_some_method_with_params => ['array', 'of', 'input', 'parameters']}]
 
 
 ## Contributing

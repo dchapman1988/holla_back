@@ -40,7 +40,7 @@ module HollaBack
     # @return [Boolean] false - if the status method is nil or false
     # @api public
     def successful?
-      !!@responding_object.send(@status_method)
+      !!get_status_method
     end
 
     private
@@ -53,18 +53,36 @@ module HollaBack
     # @api private
     def set_response!
       get_responding_methods
+      self.responding_object = @responding_object
+      if successful?
+        self.status_message ||= (@success_message || "Status: successful")
+      else
+        self.status_message ||= (@failure_message || "Status: unsuccessful")
+      end
+      return true
+    end
+
+    # Gets the returning value of the status method
+    #
+    # @example
+    #   response.get_status_method
+    #
+    # @return [Object] the returned object from the status method
+    # @api private
+    def get_status_method
+      status = false
       begin
-        self.responding_object = @responding_object
-        if successful?
-          self.status_message = @success_message || "Status: successful"
+        if @status_method.is_a? Hash
+          meth = @status_method.first
+          status = !!@responding_object.send(meth.first, *meth.last)
         else
-          self.status_message = @failure_message || "Status: unsuccessful"
+          status = !!@responding_object.send(@status_method)
         end
       rescue Exception => e
         self.responding_object = e.class
         self.status_message = e.message
       end
-      return true
+      return status
     end
 
     # Gets the responding methods
@@ -78,17 +96,13 @@ module HollaBack
       @responding_methods.each do |meth|
         begin
           if meth.is_a? Hash
-            meth.each_pair { |k,v|
-              meth_responses[k.to_sym] = @responding_object.send(k, *v)
-            }
+            meth.each_pair { |k,v| meth_responses[k.to_sym] = @responding_object.send(k, *v) }
           else
             meth_responses[meth.to_sym] = @responding_object.send(meth)
           end
         rescue Exception => e
           if meth.is_a? Hash
-            meth.each_pair { |k,v|
-              meth_responses[k.to_sym] = "#{e.class}: #{e.message}"
-            }
+            meth.each_pair { |k,v| meth_responses[k.to_sym] = "#{e.class}: #{e.message}" }
           else
             meth_responses[meth.to_sym] = "#{e.class}: #{e.message}"
           end
