@@ -25,83 +25,93 @@ Ponder the hypothetical class with HollaBack included that will be used for thes
 
 > `some_class.rb`
 
-    class SomeClass
-      include HollaBack
+```ruby
+class SomeClass
+  include HollaBack
 
-      def truthy_method
-        true
-      end
+  def truthy_method
+    true
+  end
 
-      def falsey_method
-        [nil, false].sample
-      end
+  def falsey_method
+    [nil, false].sample
+  end
 
-      def conditional_method_with_params(condition=nil)
-        condition ? true : false
-      end
+  def conditional_method_with_params(condition=nil)
+    condition ? true : false
+  end
 
-      def info_method
-        'some random info'
-      end
+  def info_method
+    'some random info'
+  end
 
-      def optional_method
-        'some random info'
-      end
+  def optional_method
+    'some random info'
+  end
 
-      def optional_method_with_params(param=nil)
-        param ? true : false
-      end
-    end
+  def optional_method_with_params(param=nil)
+    param ? true : false
+  end
+end
+```
 
 
 Simple example:
 
-    klass = SomeClass.new
+```ruby
+klass = SomeClass.new
 
-    # Minimal request
-    response = klass.response(status_method: 'truthy_method') 
-    # => #<HollaBack::Response>
-    response.successful?
-    # => true
-    response.status_message
-    # => "Status: successful"
+# Minimal request
+response = klass.response(status_method: 'truthy_method') 
+# => #<HollaBack::Response>
+response.successful?
+# => true
+response.status_message
+# => "Status: successful"
+```
 
 With params in the status method:
 
-    klass = SomeClass.new
+```ruby
+klass = SomeClass.new
 
-    # Minimal request
-    response = klass.response(status_method: {optional_method_with_params: [true]}) 
-    # => #<HollaBack::Response>
-    response.successful?
-    # => true
-    response.status_message
-    # => "Status: successful"
+# Minimal request
+response = klass.response(status_method: {optional_method_with_params: [true]}) 
+# => #<HollaBack::Response>
+response.successful?
+# => true
+response.status_message
+# => "Status: successful"
+```
 
 With customized status messages:
 
-    # If we have a truthy status method
-    response = klass.response(status_method: 'truthy_method', success_message: "It worked! :D", failure_message: "It didn't work! D:") 
-    # => #<HollaBack::Response>
-    response.successful?
-    # => true
-    response.status_message
-    # => "It worked! :D"
+```ruby
+# If we have a truthy status method
+response = klass.response(status_method: 'truthy_method', success_message: "It worked! :D", failure_message: "It didn't work! D:") 
+# => #<HollaBack::Response>
+response.successful?
+# => true
+response.status_message
+# => "It worked! :D"
 
-    # If we have a falsy status method
-    response = klass.response(status_method: 'falsey_method', success_message: "It worked! :D", failure_message: "It didn't work! D:") 
-    # => #<HollaBack::Response>
-    response.successful?
-    # => false
-    response.status_message
-    # => "It didn't work! D:"
+# If we have a falsy status method
+response = klass.response(status_method: 'falsey_method', success_message: "It worked! :D", failure_message: "It didn't work! D:") 
+# => #<HollaBack::Response>
+response.successful?
+# => false
+response.status_message
+# => "It didn't work! D:"
+```
 
 With extra methods you need information from
 
-    response = klass.response(status_method: 'falsey_method', responding_methods: [:optional_method, {:optional_method_with_params => ['some param']}])
-    # => #<HollaBack::Response>
-    response.responding_methods
-    #=> {:optional_method=>"this was only optional", :optional_method_with_params=>true}
+```ruby
+response = klass.response(status_method: 'falsey_method', responding_methods: [:optional_method, {:optional_method_with_params => ['some param']}])
+# => #<HollaBack::Response>
+response.responding_methods
+#=> {:optional_method=>"this was only optional", :optional_method_with_params=>true}
+```
 
 If you pass in a status method or some responding methods that raise exceptions, HollaBack will
 simply handle these gracefully, because exceptions are still a response from your code. The important
@@ -110,26 +120,32 @@ the exception on the status method, else you can check the responding object for
 
 With some method that totally doesn't exist
 
-    response = klass.response(status_method: 'some_method_that_totally_doesnt_exist')
-    # => #<HollaBack::Response>
-    response.responding_object
-    #=> NoMethodError
-    response.status_message
-    #=> "undefined method `some_method_that_totally_doesnt_exist' for #<SomeClass:0x00000001e1b008>"
+```ruby
+response = klass.response(status_method: 'some_method_that_totally_doesnt_exist')
+# => #<HollaBack::Response>
+response.responding_object
+#=> NoMethodError
+response.status_message
+#=> "undefined method `some_method_that_totally_doesnt_exist' for #<SomeClass:0x00000001e1b008>"
+```
 
 ## Synopsis For Sending Methods
 
 Synopsis for sending a method with parameters (the all important status method):
 
-    # This is how you'd do it for the status method
-    {:name_of_status_method => ['array', 'of', 'input', 'parameters']}
+```ruby
+# This is how you'd do it for the status method
+{:name_of_status_method => ['array', 'of', 'input', 'parameters']}
+```
 
 Synopsis for sending multiple methods, some requiring parameters:
 
-    # This is how you'd do it for the responding methods, which follows the same
-    # pattern as the status method, but as elements in an array so that you can
-    # respond with multiple responding methods
-    ['name_of_some_method_with_no_params', {:name_of_some_method_with_params => ['array', 'of', 'input', 'parameters']}]
+```ruby
+# This is how you'd do it for the responding methods, which follows the same
+# pattern as the status method, but as elements in an array so that you can
+# respond with multiple responding methods
+['name_of_some_method_with_no_params', {:name_of_some_method_with_params => ['array', 'of', 'input', 'parameters']}]
+```
 
 
 ## Contributing
